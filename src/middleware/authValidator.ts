@@ -10,7 +10,7 @@ export default class AuthValidator {
       // email must be an email
       body('email').isEmail().withMessage('Format email tidak valid'),
       check('email').custom(async (value: String) => {
-        return UserModel.getUserInfo({ email: value }).then((result) => {
+        return UserModel.getAllUser({ email: value }).then((result) => {
           if (result.data?.rows[0]?.id) {
             return Promise.reject('Email telah digunakan. Mohon gunakan email lain');
           }
@@ -36,7 +36,7 @@ export default class AuthValidator {
       // email must be an email
       body('email').isEmail().withMessage('Format email tidak valid'),
       check('email').custom(async (value: String) => {
-        return UserModel.getUserInfo({ email: value }).then((result) => {
+        return UserModel.getAllUser({ email: value }).then((result) => {
           if (result.data.rowCount === 0) {
             return Promise.reject('Email atau password yang Anda masukkan salah');
           } else {
@@ -65,7 +65,7 @@ export default class AuthValidator {
   public static loginSIAKADValidator = () => {
     return [
       check('username').custom(async (value: String, { req }: any) => {
-        return UserModel.getUserInfo(value.includes('@') ? { email: value } : { id_employee: value }).then((result) => {
+        return UserModel.getAllUser(value.includes('@') ? { email: value } : { id_employee: value }).then((result) => {
           if (result.data.rowCount === 0) {
             req.query.login_siakad = 'Y';
             req.query.create_new = 'Y';
@@ -83,7 +83,7 @@ export default class AuthValidator {
       // email must be an email
       body('email').isEmail().withMessage('Format email tidak valid'),
       check('email').custom(async (value: String) => {
-        return UserModel.getUserInfo({ email: value }).then((result) => {
+        return UserModel.getAllUser({ email: value }).then((result) => {
           if (result.data?.rowCount === 0) {
             return Promise.reject('Email tidak terdaftar');
           }
