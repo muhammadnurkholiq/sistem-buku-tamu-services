@@ -3,7 +3,7 @@
 FROM node:18
 
 # tcp port
-EXPOSE 8080
+EXPOSE 9090
 
 # Set the working directory in the container
 WORKDIR /app
