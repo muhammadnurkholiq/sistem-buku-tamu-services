@@ -11,7 +11,7 @@ export default class Users {
       try {
         const sqlParams: any[] = [];
 
-        let qs = `select tu.* from sc_main.t_users tu where tu.id is not null`;
+        let qs = `select tu.* from sc_main.t_user tu where tu.id is not null`;
 
         let indexP = 1;
         if (param?.id) {
