@@ -80,7 +80,6 @@ class User {
 
         const dataUser = await UserModel.getAllUser(req?.query);
         const users = dataUser?.data?.rows;
-
         let userExist = false;
 
         for (let i = 0; i < users?.length; i++) {
@@ -88,10 +87,9 @@ class User {
             userExist = true;
           }
         }
-
         if (!userExist) {
           // 1. insert data
-          const createAccount = await DbControll.createData({ ...req.body, password: newPassword, status: '01' }, 'sc_main.t_user', 'id', client);
+          const createAccount = await DbControll.createData({ ...req.body, password: newPassword }, 'sc_main.t_user', 'id', client);
 
           // 2. create log activity
           await DbControll.insertLog(req.body.id_client, 'Menambahkan user baru', req, client);
