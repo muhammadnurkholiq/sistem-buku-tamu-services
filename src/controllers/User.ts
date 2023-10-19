@@ -125,7 +125,7 @@ class User {
         );
 
         // 3. move old data to sc_log
-        await DbControll.createData({ ...currentData.data.rows[0], id_user_activity: log.data.rows[0].id }, 'sc_log.t_user', 'id', client);
+        await DbControll.createData({ ...currentData.data.rows[0], id_user_activity: log.data.rows[0].id }, 'sc_log.user_logs', 'id', client);
 
         // 4. update data
         const whereUpdate = { id: req.params.id, qs: 'id' };
@@ -158,7 +158,7 @@ class User {
         );
 
         // 3. move old data to sc_log
-        await DbControll.createData({ ...currentData.data.rows[0], id_user_activity: log.data.rows[0].id }, 'sc_log.t_user', 'id', client);
+        await DbControll.createData({ ...currentData.data.rows[0], id_user_activity: log.data.rows[0].id }, 'sc_log.user_logs', 'id', client);
 
         // 4. update data
         const whereUpdate = { id: req.params.id, qs: 'id' };
@@ -189,7 +189,7 @@ class User {
         // 3. move old data to sc_log
         await DbControll.createData(
           { ...currentData.data.rows[0], id_client: req.body.id_client, deleted_by: req.body.id_client, id_user_activity: log.data.rows[0].id },
-          'sc_log.t_user',
+          'sc_log.user_logs',
           'id',
           client
         );

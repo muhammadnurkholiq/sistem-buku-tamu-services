@@ -14,6 +14,8 @@ class Auth {
       const data = req.body;
       const dataRow: IResM = await AuthModel.login(data);
 
+      console.log(dataRow.data.rows);
+
       if (dataRow.data.rows.length < 1) {
         return response(res, 422, 'Email atau password yang Anda masukkan salah');
       }
@@ -21,6 +23,10 @@ class Auth {
       const checkPass = await bcrypt.compare(data.password, dataRow.data.rows[0].password);
       if (!checkPass) {
         return response(res, 422, 'Email atau password yang Anda masukkan salah');
+      }
+
+      if (dataRow.data.rows[0]?.status === '02') {
+        return response(res, 422, 'Akun anda dinonaktifkan');
       }
 
       const accessToken = await AuthToken.generateToken(
