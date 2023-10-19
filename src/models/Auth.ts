@@ -6,7 +6,7 @@ export default class Auth {
   public static login = (data: any): Promise<IResM> => {
     return new Promise((resolve, reject) => {
       try {
-        let qs = 'select a.id, a.email, a.password, a.role from sc_main.t_user a where a.email = $1 limit 1';
+        let qs = 'select * from sc_main.t_user a where a.email = $1 limit 1';
         db.query(qs, [data.email], (err: any, result: any) => {
           if (err) {
             reject({ success: false, error: err });

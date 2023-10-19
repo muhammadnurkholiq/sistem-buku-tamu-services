@@ -5,6 +5,7 @@ import PingRoutes from './PingRoutes';
 
 // main routes
 import AuthRoutes from './AuthRoutes';
+import SummaryRoutes from './SummaryRoutes';
 import UserRoutes from './UserRoutes';
 
 class Routers extends BaseRouter {
@@ -15,6 +16,7 @@ class Routers extends BaseRouter {
 
     // main routes
     this.router.use('/auth', AuthRoutes);
+    this.router.use('/summary', SummaryRoutes);
     this.router.use('/user', UserRoutes);
   }
 }
