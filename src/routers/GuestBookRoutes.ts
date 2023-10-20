@@ -8,6 +8,8 @@ class GuestBookRoutes extends BaseRouter {
     // get
     // this.router.get('/', AuthGuard.checkAccessToken, Controller.getAllGuestBook);
     this.router.get('/', Controller.getAllGuestBook);
+    this.router.get('/table', Controller.getTableGuestBook);
+    this.router.get('/:id', Controller.getGuestBook);
   }
 }
 

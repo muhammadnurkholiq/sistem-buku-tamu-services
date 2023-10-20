@@ -65,7 +65,7 @@ export default class GuestBook {
         page = (Number(page) - 1) * Number(offset);
         const sqlParams: String[] = [];
 
-        let qs = 'select tgb.* from sc_main.t_GuestBook tgb where tgb.id is not null';
+        let qs = 'select tgb.* from sc_main.t_guest_book tgb where tgb.id is not null';
 
         let indexP = 1;
         if (param?.id) {
