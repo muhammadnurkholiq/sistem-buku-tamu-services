@@ -61,7 +61,7 @@ class User {
       const result = await UserModel.getAllUser({ id: req.params.id });
 
       if (result.success) {
-        return response(res, 200, 'Berhasil mendapatkan daftar user', true, result.data.rows);
+        return response(res, 200, 'Berhasil mendapatkan data user', true, result.data.rows);
       } else {
         return response(res, 500, 'Terjadi kesalahan');
       }

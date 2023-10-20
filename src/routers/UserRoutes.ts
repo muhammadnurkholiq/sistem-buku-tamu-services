@@ -7,20 +7,20 @@ import validator from '../middleware/validator';
 class UserRoutes extends BaseRouter {
   public routes(): void {
     // get
-    this.router.get('/', AuthGuard.checkAccessTokenAdmin, Controller.getAllUser);
-    this.router.get('/all', AuthGuard.checkAccessTokenAdmin, Controller.getAllUser);
-    this.router.get('/table', AuthGuard.checkAccessTokenSuperAdmin, Controller.getTableUser);
-    this.router.get('/:id', AuthGuard.checkAccessTokenSuperAdmin, Controller.getUser);
+    this.router.get('/', AuthGuard.checkAccessTokenStaff, Controller.getAllUser);
+    this.router.get('/all', AuthGuard.checkAccessTokenStaff, Controller.getAllUser);
+    this.router.get('/table', AuthGuard.checkAccessTokenAdmin, Controller.getTableUser);
+    this.router.get('/:id', AuthGuard.checkAccessTokenAdmin, Controller.getUser);
 
     // post
-    this.router.post('/', AuthGuard.checkAccessTokenSuperAdmin, validator.validate, Controller.createUser);
+    this.router.post('/', AuthGuard.checkAccessTokenAdmin, validator.validate, Controller.createUser);
 
     // patch
-    this.router.patch('/:id', AuthGuard.checkAccessTokenSuperAdmin, validator.validate, Controller.updateUser);
-    this.router.patch('/changePassword/:id', AuthGuard.checkAccessTokenSuperAdmin, validator.validate, Controller.changePassword);
+    this.router.patch('/:id', AuthGuard.checkAccessTokenAdmin, validator.validate, Controller.updateUser);
+    this.router.patch('/changePassword/:id', AuthGuard.checkAccessTokenAdmin, validator.validate, Controller.changePassword);
 
     // delete
-    this.router.delete('/:id', AuthGuard.checkAccessTokenSuperAdmin, validator.validate, Controller.deleteUser);
+    this.router.delete('/:id', AuthGuard.checkAccessTokenAdmin, validator.validate, Controller.deleteUser);
   }
 }
 

@@ -22,7 +22,7 @@ class AuthGuard {
     }
   };
 
-  public checkAccessTokenSuperAdmin = async (req: any, res: Response, next: NextFunction) => {
+  public checkAccessTokenAdmin = async (req: any, res: Response, next: NextFunction) => {
     try {
       if (!req.headers.authorization) {
         return response(res, 401, 'Unauthorized Access');
@@ -40,7 +40,7 @@ class AuthGuard {
     }
   };
 
-  public checkAccessTokenAdmin = async (req: any, res: Response, next: NextFunction) => {
+  public checkAccessTokenStaff = async (req: any, res: Response, next: NextFunction) => {
     try {
       if (!req.headers.authorization) {
         return response(res, 401, 'Unauthorized Access');
@@ -89,7 +89,7 @@ class AuthGuard {
           reject(new Error('Expired token...'));
         }
       } else if (token[0] !== secret) {
-        reject(new Error('Wrong secret token...'));
+        reject(new Error('Invalid Token'));
       }
       resolve({ message: 'Token verified', data: { id_people: token[1], role: token[2] } });
     });
