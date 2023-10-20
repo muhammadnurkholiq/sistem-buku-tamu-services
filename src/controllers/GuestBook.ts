@@ -63,104 +63,53 @@ class GuestBook {
   }
 
   // create guest book
-  // createGuestBook = async (req: IGuestBookParam, res: Response) => {
-  //   try {
-  //     tx(async (client: any) => {
-  //       const salt = await bcrypt.genSalt(13);
-  //       const newPassword = await bcrypt.hash(req.body.password, salt);
+  createGuestBook = async (req: IGuestBookParam, res: Response) => {
+    try {
+      tx(async (client: any) => {
+        // 1. insert data
+        const createAccount = await DbControll.createData({ ...req.body, created_by: req.body.id_client }, 'sc_main.t_guest_book', 'id', client);
 
-  //       const users = dataGuestBook?.data?.rows;
-  //       let userExist = false;
+        // 2. create log activity
+        await DbControll.insertLog(req.body.id_client, 'Menambahkan data', req, client);
 
-  //       for (let i = 0; i < users?.length; i++) {
-  //         if (users[i]?.email === req.body.email) {
-  //           userExist = true;
-  //         }
-  //       }
-  //       if (!userExist) {
-  //         // 1. insert data
-  //         const createAccount = await DbControll.createData({ ...req.body, password: newPassword }, 'sc_main.t_user', 'id', client);
-
-  //         // 2. create log activity
-  //         await DbControll.insertLog(req.body.id_client, 'Menambahkan buku tamu baru', req, client);
-
-  //         if (createAccount.success) {
-  //           return response(res, 201, `berhasil menambahkan pengguna baru`, true);
-  //         }
-  //       } else {
-  //         return response(res, 400, `email pengguna sudah terdaftar`, false);
-  //       }
-  //     }, res);
-  //   } catch (error) {
-  //     return response(res, 500, 'Gagal menambahkan pengguna baru');
-  //   }
-  // };
+        if (createAccount.success) {
+          return response(res, 201, `Berhasil menambahkan data`, true);
+        }
+      }, res);
+    } catch (error) {
+      return response(res, 500, 'Gagal menambahkan data');
+    }
+  };
 
   // update guest book
-  // updateGuestBook = async (req: IGuestBookParam, res: Response) => {
-  //   try {
-  //     tx(async (client: any) => {
-  //       // prevent column updates it shouldn't do by themselves
-  //       delete req.body.password;
+  updateGuestBook = async (req: IGuestBookParam, res: Response) => {
+    try {
+      tx(async (client: any) => {
+        // 1. update data
+        const whereUpdate = { id: req.params.id, qs: 'id' };
+        await DbControll.updateData(whereUpdate, { ...req.body, updated_by: req.body.id_client }, 'sc_main.t_guest_book', client);
 
-  //       // 1. get old data
-  //       const currentData = await GuestBookModel.getAllGuestBook({ id: req.params.id });
-
-  //       // 2. create log activity
-  //       const log = await DbControll.insertLog(
-  //         req.body.id_client,
-  //         `Mengubah data pengguna ${currentData.data.rows[0].full_name} (${req.params.id})`,
-  //         req,
-  //         client
-  //       );
-
-  //       // 3. move old data to sc_log
-  //       await DbControll.createData({ ...currentData.data.rows[0], id_user_activity: log.data.rows[0].id }, 'sc_log.user_logs', 'id', client);
-
-  //       // 4. update data
-  //       const whereUpdate = { id: req.params.id, qs: 'id' };
-  //       await DbControll.updateData(whereUpdate, { ...req.body, updated_by: req.body.id_client }, 'sc_main.t_user', client);
-
-  //       return response(res, 200, `Data pengguna berhasil diperbarui`, true);
-  //     }, res);
-  //   } catch (error: any) {
-  //     return response(res, 500, 'Gagal memperbarui data pengguna');
-  //   }
-  // };
+        return response(res, 200, `Data berhasil diperbarui`, true);
+      }, res);
+    } catch (error: any) {
+      return response(res, 500, 'Gagal memperbarui data');
+    }
+  };
 
   // delete guest book
-  // deleteGuestBook = async (req: IGuestBookParam, res: Response) => {
-  //   try {
-  //     tx(async (client: any) => {
-  //       // 1. get old data
-  //       const currentData = await GuestBookModel.getAllGuestBook({ id: req.params.id });
+  deleteGuestBook = async (req: IGuestBookParam, res: Response) => {
+    try {
+      tx(async (client: any) => {
+        // 1. delete data
+        const whereDelete = { id: req.params.id, qs: 'id' };
+        await DbControll.deleteData(whereDelete, 'sc_main.t_guest_book', client);
 
-  //       // 2. create log activity
-  //       const log = await DbControll.insertLog(
-  //         req.body.id_client,
-  //         `Menghapus data pengguna ${currentData.data.rows[0].full_name} (${currentData.data.rows[0].id})`,
-  //         req,
-  //         client
-  //       );
-
-  //       // 3. move old data to sc_log
-  //       await DbControll.createData(
-  //         { ...currentData.data.rows[0], id_client: req.body.id_client, deleted_by: req.body.id_client, id_user_activity: log.data.rows[0].id },
-  //         'sc_log.user_logs',
-  //         'id',
-  //         client
-  //       );
-
-  //       // 4. delete data
-  //       const whereDelete = { id: req.params.id, qs: 'id' };
-  //       await DbControll.deleteData(whereDelete, 'sc_main.t_user', client);
-
-  //       return response(res, 200, `Pengguna berhasil dihapus`, true);
-  //     }, res);
-  //   } catch (error: any) {
-  //     return response(res, 500, 'Gagal menghapus pengguna');
-  //   }
-  // };
+        return response(res, 200, `Data berhasil dihapus`, true);
+      }, res);
+    } catch (error: any) {
+      return response(res, 500, 'Gagal menghapus data');
+    }
+  };
 }
 
 export default new GuestBook();
