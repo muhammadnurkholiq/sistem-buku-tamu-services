@@ -11,7 +11,10 @@ export default class GuestBook {
       try {
         const sqlParams: any[] = [];
 
-        let qs = `select tgb.* from sc_main.t_guest_book tgb where tgb.id is not null`;
+        let qs = `select tgb.*, tu.id as employee_id, tu.full_name as employee_name
+        from sc_main.t_guest_book tgb 
+        left join sc_main.t_user tu on tu.id = tgb.id_client
+        where tgb.id is not null`;
 
         let indexP = 1;
         if (param?.id) {
@@ -65,7 +68,10 @@ export default class GuestBook {
         page = (Number(page) - 1) * Number(offset);
         const sqlParams: String[] = [];
 
-        let qs = 'select tgb.* from sc_main.t_guest_book tgb where tgb.id is not null';
+        let qs = `select tgb.*, tu.id as employee_id, tu.full_name as employee_name
+        from sc_main.t_guest_book tgb 
+        left join sc_main.t_user tu on tu.id = tgb.id_client
+        where tgb.id is not null`;
 
         let indexP = 1;
         if (param?.id) {

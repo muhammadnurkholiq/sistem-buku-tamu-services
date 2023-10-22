@@ -14,9 +14,12 @@ export default class Summary {
         let qs = '';
         if (role === '01') {
           qs = `select count(tu.*) as total_user,
-              (select count(tu2.*) from sc_main.t_user tu2 where tu2.role = '01') as total_user_admin,
-              (select count(tu3.*) from sc_main.t_user tu3 where tu3.role = '02') as total_user_staff
-              from sc_main.t_user tu`;
+          (select count(tu2.*) from sc_main.t_user tu2 where tu2.role = '01') as total_user_admin,
+          (select count(tu3.*) from sc_main.t_user tu3 where tu3.role = '02') as total_user_staff,
+          (select count(tgb.*) from sc_main.t_guest_book tgb) as total_guest_book
+          from sc_main.t_user tu`;
+        } else {
+          qs = 'select count(tgb.*) as total_guest_book from sc_main.t_guest_book tgb';
         }
 
         db.query(qs, sqlParams, (err: any, result: any) => {
