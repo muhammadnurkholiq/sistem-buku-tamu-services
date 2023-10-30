@@ -4,6 +4,7 @@ export interface ISummaryParam {
   params?: {} | any;
   body?: {} | any;
   role?: String;
+  year?: string;
   status?: String;
   page?: Number;
   offset?: Number;

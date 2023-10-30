@@ -7,6 +7,7 @@ class SummaryRoutes extends BaseRouter {
   public routes(): void {
     // get
     this.router.get('/', AuthGuard.checkAccessToken, Controller.getSummaryGlobal);
+    this.router.get('/chart-guest-book', AuthGuard.checkAccessToken, Controller.getReportPerYear);
   }
 }
 
