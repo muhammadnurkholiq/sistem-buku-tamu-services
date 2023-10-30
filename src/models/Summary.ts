@@ -33,4 +33,32 @@ export default class Summary {
       }
     });
   };
+
+  public static getReportPerYear = (params?: ISummaryParam): Promise<IResM> => {
+    return new Promise((resolve, reject) => {
+      try {
+        const date1 = new Date(`${params?.year}-01-01`);
+        const date2 = new Date(`${params?.year}-12-31`);
+        const qs = `select date_part('month',a.list_month) as month, b.total_report from (SELECT GENERATE_SERIES
+          (
+              (DATE($1)),
+              (DATE($2)),
+              interval '1 MONTH'
+          )::DATE  as list_month) a left join (
+            select count(a.id) as total_report, date_trunc('month',date(a.created)) as created from sc_main.t_guest_book a
+               group by date_trunc('month',date(a.created))
+            ) b on  date_trunc('month',date(b.created))
+            = date_trunc('month',a.list_month)`;
+
+        db.query(qs, [date1, date2], (err: any, result: any) => {
+          if (err) {
+            reject({ success: false, error: err });
+          }
+          resolve({ success: true, data: result });
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
 }

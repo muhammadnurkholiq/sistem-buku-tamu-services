@@ -19,6 +19,22 @@ class Summary {
       return response(res, 500, 'Terjadi kesalahan');
     }
   }
+
+  async getReportPerYear(req: ISummaryParam, res: Response): Promise<Response> {
+    try {
+      const result = await SummaryModel.getReportPerYear({ year: req.query.year || new Date().getFullYear().toString() });
+      if (!result.success) {
+        return response(res, 400, 'Terjadi kesalahan');
+      }
+      if (result.data.rowCount === 0) {
+        return response(res, 400, 'Terjadi kesalahan');
+      }
+      return response(res, 200, 'Berhasil mendapatkan summary', true, result.data.rows);
+    } catch (error) {
+      console.log(error);
+      return response(res, 400, 'Terjadi kesalahan');
+    }
+  }
 }
 
 export default new Summary();
