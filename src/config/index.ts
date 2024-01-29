@@ -31,7 +31,6 @@ const tx = (callback: any, res: Response) => {
     } catch (err: any) {
       await client.query('ROLLBACK');
       client.release();
-      console.log(err.stack);
       response(res, 500, 'Transaction failed');
     }
   });

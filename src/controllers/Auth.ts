@@ -14,8 +14,6 @@ class Auth {
       const data = req.body;
       const dataRow: IResM = await AuthModel.login(data);
 
-      console.log(dataRow.data.rows);
-
       if (dataRow.data.rows.length < 1) {
         return response(res, 422, 'Email atau password yang Anda masukkan salah');
       }
