@@ -93,20 +93,4 @@ export default class Crud {
       }
     });
   };
-
-  public static insertLog = async (id_client: String, activity: String, req: any, client: any, isPrivate: Boolean = false) => {
-    // Create log
-    const dataLog = {
-      id_client: id_client,
-      activity: activity,
-      method: req.method,
-      endpoint: req.originalUrl,
-      req_query: isPrivate ? null : JSON.stringify(req.query),
-      req_params: isPrivate ? null : JSON.stringify(req.params),
-      req_body: isPrivate ? null : JSON.stringify(req.body),
-    };
-
-    const res = await Crud.createData(dataLog, 'sc_main.t_user_activities', 'id', client);
-    return res;
-  };
 }

@@ -91,9 +91,6 @@ class User {
           // 1. insert data
           const createAccount = await DbControll.createData({ ...req.body, password: newPassword }, 'sc_main.t_user', 'id', client);
 
-          // 2. create log activity
-          await DbControll.insertLog(req.body.id_client, 'Menambahkan user baru', req, client);
-
           if (createAccount.success) {
             return response(res, 201, `berhasil menambahkan pengguna baru`, true);
           }
@@ -113,21 +110,6 @@ class User {
         // prevent column updates it shouldn't do by themselves
         delete req.body.password;
 
-        // 1. get old data
-        const currentData = await UserModel.getAllUser({ id: req.params.id });
-
-        // 2. create log activity
-        const log = await DbControll.insertLog(
-          req.body.id_client,
-          `Mengubah data pengguna ${currentData.data.rows[0].full_name} (${req.params.id})`,
-          req,
-          client
-        );
-
-        // 3. move old data to sc_log
-        await DbControll.createData({ ...currentData.data.rows[0], id_user_activity: log.data.rows[0].id }, 'sc_log.user_logs', 'id', client);
-
-        // 4. update data
         const whereUpdate = { id: req.params.id, qs: 'id' };
         await DbControll.updateData(whereUpdate, { ...req.body, updated_by: req.body.id_client }, 'sc_main.t_user', client);
 
@@ -146,21 +128,6 @@ class User {
         const salt = await bcrypt.genSalt(13);
         const newPassword = await bcrypt.hash(req.body.password, salt);
 
-        // 1. get old data
-        const currentData = await UserModel.getAllUser({ id: req.params.id });
-
-        // 2. create log activity
-        const log = await DbControll.insertLog(
-          req.body.id_client,
-          `Mereset password pengguna ${currentData.data.rows[0].full_name} (${req.params.id})`,
-          req,
-          client
-        );
-
-        // 3. move old data to sc_log
-        await DbControll.createData({ ...currentData.data.rows[0], id_user_activity: log.data.rows[0].id }, 'sc_log.user_logs', 'id', client);
-
-        // 4. update data
         const whereUpdate = { id: req.params.id, qs: 'id' };
         await DbControll.updateData(whereUpdate, { password: newPassword, updated_by: req.body.id_client }, 'sc_main.t_user', client);
 
@@ -175,26 +142,6 @@ class User {
   deleteUser = async (req: IUserParam, res: Response) => {
     try {
       tx(async (client: any) => {
-        // 1. get old data
-        const currentData = await UserModel.getAllUser({ id: req.params.id });
-
-        // 2. create log activity
-        const log = await DbControll.insertLog(
-          req.body.id_client,
-          `Menghapus data pengguna ${currentData.data.rows[0].full_name} (${currentData.data.rows[0].id})`,
-          req,
-          client
-        );
-
-        // 3. move old data to sc_log
-        await DbControll.createData(
-          { ...currentData.data.rows[0], id_client: req.body.id_client, deleted_by: req.body.id_client, id_user_activity: log.data.rows[0].id },
-          'sc_log.user_logs',
-          'id',
-          client
-        );
-
-        // 4. delete data
         const whereDelete = { id: req.params.id, qs: 'id' };
         await DbControll.deleteData(whereDelete, 'sc_main.t_user', client);
 

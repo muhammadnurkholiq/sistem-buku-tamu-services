@@ -69,9 +69,6 @@ class GuestBook {
         // 1. insert data
         const createAccount = await DbControll.createData({ ...req.body, created_by: req.body.id_client }, 'sc_main.t_guest_book', 'id', client);
 
-        // 2. create log activity
-        await DbControll.insertLog(req.body.id_client, 'Menambahkan data', req, client);
-
         if (createAccount.success) {
           return response(res, 201, `Berhasil menambahkan data`, true);
         }
